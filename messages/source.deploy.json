@@ -1,0 +1,4 @@
+{
+  "command.description": "Selectively deploys the metadata currently marked as modified in git",
+  "flag.staged": "Choose to only deploy staged files instead of modified"
+}
