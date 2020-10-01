@@ -13,19 +13,12 @@ Set of sfdx methods used by Enshift
 [![License](https://img.shields.io/npm/l/enshift-sfdx-plugin.svg)](https://github.com/enshift/enshift-sfdx-plugin/blob/master/package.json)
 
 <!-- install -->
-<!-- usage -->
-```sh-session
-$ npm install -g enshift-sfdx-plugin
-$ sfdx COMMAND
-running command...
-$ sfdx (-v|--version|version)
-enshift-sfdx-plugin/0.0.2 darwin-x64 node-v14.5.0
-$ sfdx --help [COMMAND]
-USAGE
-  $ sfdx COMMAND
-...
+# Installing the plugin
+```sh
+$ sfdx plugins:install enshift-sfdx-plugin
 ```
-<!-- usagestop -->
+
+# Commands
 <!-- commands -->
 * [`sfdx enshift:source:deploy [-s] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-enshiftsourcedeploy--s--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 
@@ -59,4 +52,6 @@ EXAMPLES
   $ sfdx enshift:source:deploy --staged
        Selectively deploys the metadata currently marked as staged in git
 ```
+
+_See code: [lib/commands/enshift/source/deploy.js](https://github.com/enshift/enshift-sfdx-plugin/blob/v0.0.2/lib/commands/enshift/source/deploy.js)_
 <!-- commandsstop -->
