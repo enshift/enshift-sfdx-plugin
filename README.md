@@ -22,7 +22,7 @@ $ npm install -g enshift-sfdx-plugin
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-enshift-sfdx-plugin/0.0.1 darwin-x64 node-v14.9.0
+enshift-sfdx-plugin/0.0.2 darwin-x64 node-v14.5.0
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -30,7 +30,38 @@ USAGE
 ```
 <!-- usagestop -->
 <!-- commands -->
+* [`sfdx enshift:source:deploy [-s] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-enshiftsourcedeploy--s--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 
+## `sfdx enshift:source:deploy [-s] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
+
+Selectively deploys the metadata currently marked as modified in git
+
+```
+USAGE
+  $ sfdx enshift:source:deploy [-s] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
+
+OPTIONS
+  -s, --staged                                                                      Choose to only deploy staged files
+                                                                                    instead of modified
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
+
+EXAMPLES
+  $ sfdx enshift:source:deploy
+       Selectively deploys the metadata currently marked as modified in git
+  $ sfdx enshift:source:deploy --staged
+       Selectively deploys the metadata currently marked as staged in git
+```
 <!-- commandsstop -->
 <!-- debugging-your-plugin -->
 # Debugging your plugin
