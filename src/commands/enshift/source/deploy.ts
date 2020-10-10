@@ -1,7 +1,7 @@
 import { flags, SfdxCommand } from "@salesforce/command";
 import { Messages, SfdxError, SfdxProject } from "@salesforce/core";
 import { AnyJson } from "@salesforce/ts-types";
-import { parseExamples, executePromise } from "../../../helpers/command";
+import { parseExamples, executePromise, executeCommandLine } from "../../../helpers/command";
 import { getModifiedFiles } from "../../../helpers/git";
 import * as util from "util";
 import * as child from "child_process";
@@ -49,7 +49,7 @@ export default class SourceDeploy extends SfdxCommand {
       throw new SfdxError("Could not find any files to deploy");
     }
 
-    return executePromise(
+    executeCommandLine(
       exec(
         `sfdx force:source:deploy --sourcepath="${modifiedFiles.join(",")}"`,
         {
@@ -58,7 +58,12 @@ export default class SourceDeploy extends SfdxCommand {
         }
       ),
       "Deploying",
-      this.ux
-    );
+      this.ux,
+      false
+    ).catch((err) => {
+      this.ux.log(err.stdout)
+    });
+
+    return;
   }
 }
