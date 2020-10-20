@@ -61,7 +61,7 @@ export default class SourceDeploy extends SfdxCommand {
       this.ux,
       false
     ).catch((err) => {
-      this.ux.log(err.stdout)
+      this.ux.log(err.stdout || err.stderr)
     });
 
     return;
