@@ -55,12 +55,6 @@ export default class SourceDeploy extends SfdxCommand {
 
     this.ux.log(modifiedFiles.join("\n"));
 
-    const isConfirmed = await this.ux.confirm(
-      'Attempting to deploy, press "y" to continue, or "n" to cancel'
-    );
-
-    if (!isConfirmed) return;
-
     executeCommandLine(
       exec(
         `sfdx force:source:deploy --sourcepath="${modifiedFiles.join(",")}"`,
