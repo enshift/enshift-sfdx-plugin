@@ -1,7 +1,7 @@
 {
   "name": "enshift-sfdx-plugin",
   "description": "Set of sfdx methods used by Enshift",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "enshift.co",
   "bugs": "https://github.com/enshift/enshift-sfdx-plugin/issues",
   "dependencies": {

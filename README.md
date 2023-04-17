@@ -28,7 +28,7 @@ Selectively deploys the metadata currently marked as modified in git
 
 ```
 USAGE
-  $ sfdx enshift:source:deploy [-s] [-u <string>] [--apiversion <string>] [--json] [--loglevel
+  $ sfdx enshift:source:deploy [-s] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
   trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
@@ -53,5 +53,5 @@ EXAMPLES
        Selectively deploys the metadata currently marked as staged in git
 ```
 
-_See code: [lib/commands/enshift/source/deploy.js](https://github.com/enshift/enshift-sfdx-plugin/blob/v0.0.2/lib/commands/enshift/source/deploy.js)_
+_See code: [lib/commands/enshift/source/deploy.js](https://github.com/enshift/enshift-sfdx-plugin/blob/v0.0.3/lib/commands/enshift/source/deploy.js)_
 <!-- commandsstop -->
