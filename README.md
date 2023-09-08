@@ -52,4 +52,6 @@ EXAMPLES
   $ sfdx enshift:source:deploy --staged
        Selectively deploys the metadata currently marked as staged in git
 ```
+
+_See code: [lib/commands/enshift/source/deploy.js](https://github.com/enshift/enshift-sfdx-plugin/blob/v0.0.4/lib/commands/enshift/source/deploy.js)_
 <!-- commandsstop -->
