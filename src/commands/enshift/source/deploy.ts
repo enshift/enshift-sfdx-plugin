@@ -1,16 +1,9 @@
 import { flags, SfdxCommand } from "@salesforce/command";
 import { Messages, SfdxError, SfdxProject } from "@salesforce/core";
-import { AnyJson } from "@salesforce/ts-types";
-import {
-  parseExamples,
-  executePromise,
-  executeCommandLine,
-} from "../../../helpers/command";
-import { getModifiedFiles } from "../../../helpers/git";
-import * as util from "util";
+import * as chalk from "chalk";
 import * as child from "child_process";
-
-const exec = util.promisify(child.exec);
+import { executePromise, parseExamples } from "../../../helpers/command";
+import { getModifiedFiles } from "../../../helpers/git";
 
 Messages.importMessagesDirectory(__dirname);
 
@@ -41,7 +34,7 @@ export default class SourceDeploy extends SfdxCommand {
   protected static requiresUsername = true;
   protected static requiresProject = true;
 
-  public async run(): Promise<AnyJson> {
+  public async run(): Promise<void> {
     const projectPath = await SfdxProject.resolveProjectPath();
     const modifiedFiles = await executePromise(
       getModifiedFiles(projectPath, this.flags.staged),
@@ -53,21 +46,33 @@ export default class SourceDeploy extends SfdxCommand {
       throw new SfdxError("Could not find any files to deploy");
     }
 
-    this.ux.log(modifiedFiles.join("\n"));
+    const childProcess = child.exec(
+      `sfdx force:source:deploy --sourcepath="${modifiedFiles.join(",")}"`,
+      {
+        cwd: projectPath,
+      }
+    );
 
-    executeCommandLine(
-      exec(
-        `sfdx force:source:deploy --sourcepath="${modifiedFiles.join(",")}"`,
-        {
-          maxBuffer: Infinity,
-          cwd: projectPath,
-        }
-      ),
-      "Deploying",
-      this.ux,
-      false
-    ).catch((err) => {
-      this.ux.log(err.stdout || err.stderr);
+    childProcess.stdout.on("data", (data) => {
+      this.ux.log(data.toString());
+    });
+
+    childProcess.stderr.on("data", (data) => {
+      this.ux.log(data.toString());
+    });
+
+    // Handle the child process exit event
+    childProcess.on("close", (code) => {
+      if (code === 0) {
+        this.ux.log(chalk.greenBright("✅ Success"));
+      } else {
+        this.ux.error(chalk.redBright(`❌ Failed`));
+      }
+    });
+
+    // Handle any errors that occur
+    childProcess.on("error", (err) => {
+      this.ux.error(chalk.redBright(`❌ Error: ${err.message}`));
     });
 
     return;
