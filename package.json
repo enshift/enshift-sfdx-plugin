@@ -1,7 +1,8 @@
 {
-  "name": "enshift-sfdx-plugin-next",
-  "description": "sfdx plugin for Enshift",
+  "name": "enshift-sfdx-plugin",
+  "description": "Set of sfdx methods used by Enshift",
   "version": "1.0.0",
+  "bugs": "https://github.com/enshift/enshift-sfdx-plugin/issues",
   "dependencies": {
     "@oclif/core": "^3.18.1",
     "@salesforce/core": "^6.4.7",
@@ -44,8 +45,13 @@
       "@oclif/plugin-help"
     ],
     "topics": {
-      "hello": {
-        "description": "Commands to say hello."
+      "enshift": {
+        "description": "Commands for Enshift",
+        "subtopics": {
+          "source": {
+            "description": "Interact with source formatted metadata"
+          }
+        }
       }
     },
     "flexibleTaxonomy": true
