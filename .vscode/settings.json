@@ -9,5 +9,8 @@
   "search.exclude": {
     "**/lib": true,
     "**/bin": true
-  }
+  },
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "rewrap.wrappingColumn": 80
 }
