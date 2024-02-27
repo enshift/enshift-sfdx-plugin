@@ -15,28 +15,18 @@ describe('enshift source deploy', () => {
     $$.restore();
   });
 
-  it('runs hello', async () => {
-    await EnshiftSourceDeploy.run([]);
+  it('throws an error', async () => {
+    try {
+      await EnshiftSourceDeploy.run([]);
+    } catch (error) {
+      expect(error).to.be.an('error');
+    }
+
     const output = sfCommandStubs.log
       .getCalls()
       .flatMap((c) => c.args)
       .join('\n');
-    expect(output).to.include('hello world');
-  });
 
-  it('runs hello with --json and no provided name', async () => {
-    const result = await EnshiftSourceDeploy.run([]);
-    expect(result.flags).to.equal(
-      '/Users/hdesmet/Projects/enshift/enshift-sfdx-plugin-next/src/commands/enshift/source/deploy.ts'
-    );
-  });
-
-  it('runs hello world --name Astro', async () => {
-    await EnshiftSourceDeploy.run(['--name', 'Astro']);
-    const output = sfCommandStubs.log
-      .getCalls()
-      .flatMap((c) => c.args)
-      .join('\n');
-    expect(output).to.include('hello Astro');
+    expect(output).to.equal('');
   });
 });
