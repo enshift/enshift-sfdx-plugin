@@ -1,78 +1,65 @@
-import { flags, SfdxCommand } from "@salesforce/command";
-import { Messages, SfdxError, SfdxProject } from "@salesforce/core";
-import * as chalk from "chalk";
-import * as child from "child_process";
-import { executePromise, parseExamples } from "../../../helpers/command";
-import { getModifiedFiles } from "../../../helpers/git";
+import { exec } from 'node:child_process';
+import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
+import { Messages } from '@salesforce/core';
+import { getModifiedFiles } from '../../../helpers/git.js';
 
-Messages.importMessagesDirectory(__dirname);
+Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
+const messages = Messages.loadMessages('enshift-sfdx-plugin', 'enshift.source.deploy');
 
-const messages = Messages.loadMessages("enshift-sfdx-plugin", "source.deploy");
+export type EnshiftSourceDeployResult = void;
 
-export default class SourceDeploy extends SfdxCommand {
-  public static description = messages.getMessage("command.description");
-  public static examples = parseExamples([
-    {
-      command: "$ sfdx enshift:source:deploy",
-      description:
-        "Selectively deploys the metadata currently marked as modified in git",
-    },
-    {
-      command: "$ sfdx enshift:source:deploy --staged",
-      description:
-        "Selectively deploys the metadata currently marked as staged in git",
-    },
-  ]);
+export default class EnshiftSourceDeploy extends SfCommand<EnshiftSourceDeployResult> {
+  public static readonly summary = messages.getMessage('summary');
+  public static readonly description = messages.getMessage('description');
+  public static readonly examples = messages.getMessages('examples');
+  public static readonly requiresProject = true;
 
-  protected static flagsConfig = {
-    staged: flags.boolean({
-      char: "s",
-      description: messages.getMessage("flag.staged"),
+  public static readonly flags = {
+    staged: Flags.boolean({
+      char: 's',
+      summary: messages.getMessage('flags.staged.summary'),
+      description: messages.getMessage('flags.staged.description'),
     }),
   };
 
-  protected static requiresUsername = true;
-  protected static requiresProject = true;
+  public async run(): Promise<EnshiftSourceDeployResult> {
+    const { flags } = await this.parse(EnshiftSourceDeploy);
+    const projectPath = this.project?.getPath();
 
-  public async run(): Promise<void> {
-    const projectPath = await SfdxProject.resolveProjectPath();
-    const modifiedFiles = await executePromise(
-      getModifiedFiles(projectPath, this.flags.staged),
-      "Reading git diff",
-      this.ux
-    );
-
-    if (!modifiedFiles.length) {
-      throw new SfdxError("Could not find any files to deploy");
+    if (!projectPath) {
+      this.error('Could not find a valid project', { exit: 1 });
     }
 
-    const childProcess = child.exec(
-      `sfdx force:source:deploy --sourcepath="${modifiedFiles.join(",")}"`,
-      {
-        cwd: projectPath,
-      }
-    );
+    const modifiedFiles = await getModifiedFiles(projectPath, flags.staged);
 
-    childProcess.stdout.on("data", (data) => {
-      this.ux.log(data.toString());
+    if (!modifiedFiles.length) {
+      this.error('Could not find any files to deploy', { exit: 1 });
+    }
+
+    const deployFiles = exec(`sf force:source:deploy --sourcepath="${modifiedFiles.join(',')}"`, {
+      cwd: projectPath,
     });
 
-    childProcess.stderr.on("data", (data) => {
-      this.ux.log(data.toString());
+    deployFiles.stdout?.on('data', (data) => {
+      this.log(data as string);
+    });
+
+    deployFiles.stderr?.on('data', (data) => {
+      this.log(data as string);
     });
 
     // Handle the child process exit event
-    childProcess.on("close", (code) => {
+    deployFiles.on('close', (code) => {
       if (code === 0) {
-        this.ux.log(chalk.greenBright("✅ Success"));
+        this.logSuccess('✅ Deploy successful');
       } else {
-        this.ux.error(chalk.redBright(`❌ Failed`));
+        this.logToStderr('❌ Deploy failed');
       }
     });
 
     // Handle any errors that occur
-    childProcess.on("error", (err) => {
-      this.ux.error(chalk.redBright(`❌ Error: ${err.message}`));
+    deployFiles.on('error', (err) => {
+      this.error(err);
     });
 
     return;
