@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "bugs": "https://github.com/enshift/enshift-sfdx-plugin/issues",
   "dependencies": {
-    "@oclif/core": "^3.18.1",
+    "@oclif/core": "^3.27.0",
     "@salesforce/core": "^6.4.7",
     "@salesforce/sf-plugins-core": "^7.1.3"
   },
