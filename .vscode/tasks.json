@@ -3,19 +3,12 @@
   "problemMatcher": "$tsc",
   "tasks": [
     {
-      "label": "Compile tests",
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "command": "yarn",
-      "type": "shell",
-      "presentation": {
-        "focus": false,
-        "panel": "dedicated"
-      },
-      "args": ["run", "pretest"],
-      "isBackground": false
+      "type": "npm",
+      "script": "build",
+      "group": "build",
+      "problemMatcher": [],
+      "label": "npm: build",
+      "detail": "wireit"
     }
   ]
 }
