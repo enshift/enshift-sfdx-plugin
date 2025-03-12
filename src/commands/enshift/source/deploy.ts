@@ -26,6 +26,10 @@ export default class EnshiftSourceDeploy extends SfCommand<EnshiftSourceDeployRe
     const { flags } = await this.parse(EnshiftSourceDeploy);
     const projectPath = this.project?.getPath();
 
+    this.warn(
+      'Note that this command uses the `sf force source deploy` command which is now deprecated. Make sure to manually install the legacy source plugin with `sf plugins install source` to continue using it.'
+    );
+
     if (!projectPath) {
       this.error('Could not find a valid project', { exit: 1 });
     }
